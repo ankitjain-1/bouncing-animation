@@ -4,44 +4,81 @@
   box-sizing: border-box;
 }
 
+$ball-color: rgb(255, 0, 170);
+$animation-props: 0.5s cubic-bezier(0.31, 0.13, 0, 0.98) infinite alternate;
+$ball-dim: 80px;
+$container-size: 400px;
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 main {
+  width: 100vw;
+  height: 100vh;
+  @include flex-center();
   .container {
-    width: 100vw;
-    height: 100vh;
+    width: $container-size;
+    height: $container-size;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-center();
   }
   .ball {
     position: absolute;
-    top: 40%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50px;
-    height: 50px;
+    transform: translate(-50%, -100%);
+    width: $ball-dim;
+    height: $ball-dim;
     border-radius: 50%;
-    // border: 1px solid black;
-    background-color: #000;
-    animation: bounce 1s ease-in-out infinite ;
+    background-color: $ball-color;
+    animation: bounce $animation-props;
     animation-direction: alternate;
+    z-index: 1;
+    &::after {
+      content: "";
+      display: block;
+      width: $ball-dim / 10;
+      height: $ball-dim / 10;
+      border-radius: 50%;
+      transform: translate(200%, 200%);
+      background-color: rgba($color: white, $alpha: 0.6);
+    }
+  }
+  .shadow {
+    position: absolute;
+    bottom: 0;
+    width: $ball-dim * 2;
+    height: $ball-dim;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+    border-radius: 50%;
+    transform-origin: bottom;
+    transform: rotate3d(1, 0, 0, 79deg);
+    animation: shadow $animation-props;
   }
 }
 
 @keyframes bounce {
   0% {
+    top: 100%;
+    width: $ball-dim * 1.4;
+    height: $ball-dim * 0.6;
+  }
+  20% {
+    width: $ball-dim * 0.7;
+    height: $ball-dim * 1.3;
+  }
+  100% {
     top: 40%;
   }
-  40% {
-    width: 40px;
-    height: 60px;
+}
+
+@keyframes shadow {
+  from {
+    width: $ball-dim * 0.8;
   }
-  50% {
-    top: 60%;
-    width: 70px;
-    height: 30px;
+  to {
+    width: $ball-dim * 2;
   }
-  // 100% {
-  //   top: 40%;
-  // }
 }
